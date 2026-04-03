@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oskar Duş — Admin Paneli</title>
+  <link rel="stylesheet" href="admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+ 
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2 class="sidebar-logo">Oskar <span>Duş</span></h2>
+      <small>Admin Paneli</small>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active" data-page="projects">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Projeler
+      </a>
+      <a href="#" class="sidebar-link" data-page="products">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 12h18"/></svg>
+        Ürünler
+      </a>
+      <a href="#" class="sidebar-link" data-page="partners">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        İş Ortakları
+      </a>
+      <a href="#" class="sidebar-link" data-page="messages">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Mesajlar
+        <span class="badge" id="messageBadge">0</span>
+      </a>
+      <a href="#" class="sidebar-link" data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Site Ayarları
+      </a>
+      <a href="#" class="sidebar-link" data-page="whatsapp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        WhatsApp
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../frontend/index.html" class="sidebar-link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+        Siteyi Görüntüle
+      </a>
+    </div>
+  </aside>
+ 
+  <!-- ═══ MOBİL HEADER ═══ -->
+  <header class="mobile-header">
+    <button class="menu-toggle" id="menuToggle">
+      <span></span><span></span><span></span>
+    </button>
+    <h2>Oskar Duş Admin</h2>
+  </header>
+ 
+  <!-- ═══ ANA İÇERİK ═══ -->
+  <main class="main-content">
+ 
+    <!-- ────── PROJELER SAYFASI ────── -->
+    <div class="page active" id="page-projects">
+      <div class="page-header">
+        <div>
+          <h1>Projeler</h1>
+          <p>Referans projelerinizi yönetin</p>
+        </div>
+        <button class="btn-add" onclick="openModal('project')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Yeni Proje Ekle
+        </button>
+      </div>
+      <div class="data-grid" id="projectsGrid">
+        <!-- JS ile doldurulacak -->
+      </div>
+    </div>
+ 
+    <!-- ────── ÜRÜNLER SAYFASI ────── -->
+    <div class="page" id="page-products">
+      <div class="page-header">
+        <div>
+          <h1>Ürünler</h1>
+          <p>Ürün kataloğunuzu yönetin</p>
+        </div>
+        <button class="btn-add" onclick="openModal('product')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Yeni Ürün Ekle
+        </button>
+      </div>
+      <div class="data-grid" id="productsGrid">
+        <!-- JS ile doldurulacak -->
+      </div>
+    </div>
+ 
+    <!-- ────── İŞ ORTAKLARI SAYFASI ────── -->
+    <div class="page" id="page-partners">
+      <div class="page-header">
+        <div>
+          <h1>İş Ortakları</h1>
+          <p>Çalıştığınız firmaları yönetin</p>
+        </div>
+        <button class="btn-add" onclick="openModal('partner')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Yeni Firma Ekle
+        </button>
+      </div>
+      <div class="data-grid" id="partnersGrid">
+        <!-- JS ile doldurulacak -->
+      </div>
+    </div>
+ 
+    <!-- ────── MESAJLAR SAYFASI ────── -->
+    <div class="page" id="page-messages">
+      <div class="page-header">
+        <div>
+          <h1>Gelen Mesajlar</h1>
+          <p>Teklif taleplerini görüntüleyin</p>
+        </div>
+        <button class="btn-secondary-action" onclick="markAllRead()">
+          Tümünü Okundu İşaretle
+        </button>
+      </div>
+      <div class="messages-list" id="messagesList">
+        <!-- JS ile doldurulacak -->
+      </div>
+    </div>
+ 
+    <!-- ────── SİTE AYARLARI SAYFASI ────── -->
+    <div class="page" id="page-settings">
+      <div class="page-header">
+        <div>
+          <h1>Site Ayarları</h1>
+          <p>İletişim bilgileri ve genel ayarlar</p>
+        </div>
+      </div>
+      <div class="settings-form">
+        <div class="settings-section">
+          <h3>Firma Bilgileri</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Firma Adı</label>
+              <input type="text" id="settingCompanyName" placeholder="Oskar Duş">
+            </div>
+            <div class="form-group">
+              <label>Slogan</label>
+              <input type="text" id="settingSlogan" placeholder="Premium Duşakabin Çözümleri">
+            </div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>İletişim Bilgileri</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Telefon</label>
+              <input type="tel" id="settingPhone" placeholder="+90 (212) 555 00 00">
+            </div>
+            <div class="form-group">
+              <label>E-Posta</label>
+              <input type="email" id="settingEmail" placeholder="info@oskardus.com.tr">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Adres</label>
+            <textarea id="settingAddress" rows="2" placeholder="Maslak Mah. AOS 55. Sok. No:2, Sarıyer / İstanbul"></textarea>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Sosyal Medya</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Instagram URL</label>
+              <input type="url" id="settingInstagram" placeholder="https://instagram.com/oskardus">
+            </div>
+            <div class="form-group">
+              <label>Facebook URL</label>
+              <input type="url" id="settingFacebook" placeholder="https://facebook.com/oskardus">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>YouTube URL</label>
+              <input type="url" id="settingYoutube" placeholder="https://youtube.com/oskardus">
+            </div>
+            <div class="form-group">
+              <label>LinkedIn URL</label>
+              <input type="url" id="settingLinkedin" placeholder="https://linkedin.com/company/oskardus">
+            </div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>E-Posta Bildirim Ayarları (EmailJS)</h3>
+          <p class="settings-hint">Form gönderimlerinde size e-posta gelmesi için <a href="https://www.emailjs.com/" target="_blank">EmailJS</a> hesabı oluşturup bilgileri buraya girin.</p>
+          <div class="form-row">
+            <div class="form-group">
+              <label>EmailJS Public Key</label>
+              <input type="text" id="settingEmailjsPublicKey" placeholder="your_public_key">
+            </div>
+            <div class="form-group">
+              <label>EmailJS Service ID</label>
+              <input type="text" id="settingEmailjsServiceId" placeholder="service_xxxxx">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>EmailJS Template ID</label>
+            <input type="text" id="settingEmailjsTemplateId" placeholder="template_xxxxx">
+          </div>
+          <div class="form-group">
+            <label>Bildirim E-Posta Adresi</label>
+            <input type="email" id="settingNotificationEmail" placeholder="bildirim@oskardus.com.tr">
+          </div>
+        </div>
+        <button class="btn-add" onclick="saveSettings()" style="margin-top:1rem;">Ayarları Kaydet</button>
+      </div>
+    </div>
+ 
+    <!-- ────── WHATSAPP SAYFASI ────── -->
+    <div class="page" id="page-whatsapp">
+      <div class="page-header">
+        <div>
+          <h1>WhatsApp Entegrasyonu</h1>
+          <p>WhatsApp ile iletişim ayarlarını yönetin</p>
+        </div>
+      </div>
+      <div class="settings-form">
+        <div class="settings-section">
+          <h3>WhatsApp Ayarları</h3>
+          <div class="form-group">
+            <label>WhatsApp Numarası (başında 90)</label>
+            <input type="tel" id="whatsappNumber" placeholder="905321234567">
+          </div>
+          <div class="form-group">
+            <label>Karşılama Mesajı</label>
+            <textarea id="whatsappMessage" rows="3" placeholder="Merhaba, Oskar Duş'a hoş geldiniz! Size nasıl yardımcı olabiliriz?"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="toggle-label">
+              <input type="checkbox" id="whatsappEnabled" checked>
+              <span class="toggle-switch"></span>
+              Sitede WhatsApp butonu göster
+            </label>
+          </div>
+        </div>
+        <div class="settings-section">
+          <h3>Önizleme</h3>
+          <div class="whatsapp-preview">
+            <div class="wa-bubble" id="waPreview">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </div>
+            <p class="wa-preview-text">Sitede sağ alt köşede bu buton görünecek</p>
+          </div>
+        </div>
+        <button class="btn-add" onclick="saveWhatsApp()" style="margin-top:1rem;">WhatsApp Ayarlarını Kaydet</button>
+      </div>
+    </div>
+ 
+  </main>
+ 
+  <!-- ═══ MODAL ═══ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Yeni Ekle</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- JS ile doldurulacak -->
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ═══ MESAJ DETAY MODAL ═══ -->
+  <div class="modal-overlay" id="messageModalOverlay">
+    <div class="modal" id="messageModal">
+      <div class="modal-header">
+        <h2>Mesaj Detayı</h2>
+        <button class="modal-close" onclick="closeMessageModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="messageModalBody">
+        <!-- JS ile doldurulacak -->
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ═══ BİLDİRİM TOAST ═══ -->
+  <div class="toast-container" id="toastContainer"></div>
+ 
+  <script src="admin.js"></script>
+</body>
+</html>
