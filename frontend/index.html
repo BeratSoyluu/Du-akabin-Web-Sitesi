@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CrystalCabin — Premium Duşakabin Çözümleri</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ═══════════════════ NAVİGASYON ═══════════════════ -->
+  <nav class="nav" id="nav">
+    <a href="#" class="nav-logo">Crystal<span>Cabin</span></a>
+    <ul class="nav-links">
+      <li><a href="#hakkimizda">Hakkımızda</a></li>
+      <li><a href="#projeler">Projeler</a></li>
+      <li><a href="#urunler">Ürünler</a></li>
+      <li><a href="#firmalar">Firmalar</a></li>
+      <li><a href="#iletisim" class="nav-cta">Teklif Al</a></li>
+    </ul>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menüyü aç">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- Mobil Menü -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileCloseBtn" aria-label="Menüyü kapat">&times;</button>
+    <a href="#hakkimizda" class="mobile-link">Hakkımızda</a>
+    <a href="#projeler" class="mobile-link">Projeler</a>
+    <a href="#urunler" class="mobile-link">Ürünler</a>
+    <a href="#firmalar" class="mobile-link">Firmalar</a>
+    <a href="#iletisim" class="mobile-link">İletişim</a>
+  </div>
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-lines"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Premium Duşakabin Çözümleri</div>
+      <h1>Banyonuza <em>Lüks</em><br>Dokunuşu Katıyoruz</h1>
+      <p class="hero-desc">
+        20 yılı aşkın tecrübemizle, en kaliteli malzemeler ve özel tasarımlarla 
+        hayalinizdeki banyoyu gerçeğe dönüştürüyoruz.
+      </p>
+      <div class="hero-buttons">
+        <a href="#urunler" class="btn-primary">Ürünleri İncele</a>
+        <a href="#iletisim" class="btn-secondary">Ücretsiz Keşif</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-number">2.500+</span>
+          <span class="hero-stat-label">Tamamlanan Proje</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-number">20+</span>
+          <span class="hero-stat-label">Yıllık Deneyim</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-number">150+</span>
+          <span class="hero-stat-label">Kurumsal Müşteri</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ NEDEN BİZ ═══════════════════ -->
+  <section class="section" id="hakkimizda">
+    <div class="section-header reveal">
+      <span class="section-tag">Neden Biz</span>
+      <h2 class="section-title">Kalite, <em>Güven</em> ve Estetik</h2>
+      <p class="section-desc">
+        Her projede en yüksek standartları hedefliyor, müşterilerimize 
+        kusursuz bir deneyim sunuyoruz.
+      </p>
+      <div class="divider"></div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h4>Özel Tasarım</h4>
+        <p>Her banyo farklıdır. Alanınıza özel ölçü ve tasarımlarla mükemmel uyum sağlıyoruz.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h4>Premium Malzeme</h4>
+        <p>Temperli cam, paslanmaz çelik aksesuar ve A+ kalite profiller kullanıyoruz.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+        </div>
+        <h4>Hızlı Montaj</h4>
+        <p>Profesyonel ekibimizle hızlı ve temiz montaj garantisi veriyoruz.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+        </div>
+        <h4>2 Yıl Garanti</h4>
+        <p>Tüm ürün ve işçiliklerimize 2 yıl tam garanti sunuyoruz.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ REFERANS PROJELER ═══════════════════ -->
+  <section class="section section-dark" id="projeler">
+    <div class="section-header reveal">
+      <span class="section-tag">Referans Projeler</span>
+      <h2 class="section-title">Son <em>Çalışmalarımız</em></h2>
+      <p class="section-desc">Tamamladığımız projelerden bazı örnekler.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item gallery-item--large reveal">
+        <div class="gallery-item-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M3 9h18M9 21V9"/>
+          </svg>
+        </div>
+        <div class="gallery-overlay">
+          <h4>Zorlu Center Residence</h4>
+          <p>48 daire — Frameless cam duşakabin uygulaması</p>
+          <span class="gallery-tag">Toplu Proje</span>
+        </div>
+      </div>
+      <div class="gallery-item reveal">
+        <div class="gallery-item-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M3 9h18M9 21V9"/>
+          </svg>
+        </div>
+        <div class="gallery-overlay">
+          <h4>Bebek Villa Projesi</h4>
+          <p>Özel tasarım walk-in duşakabin</p>
+          <span class="gallery-tag">Özel Proje</span>
+        </div>
+      </div>
+      <div class="gallery-item reveal">
+        <div class="gallery-item-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M3 9h18M9 21V9"/>
+          </svg>
+        </div>
+        <div class="gallery-overlay">
+          <h4>Hilton Otel Renovasyon</h4>
+          <p>120 oda — Sürgülü cam sistem</p>
+          <span class="gallery-tag">Kurumsal</span>
+        </div>
+      </div>
+      <div class="gallery-item reveal">
+        <div class="gallery-item-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M3 9h18M9 21V9"/>
+          </svg>
+        </div>
+        <div class="gallery-overlay">
+          <h4>Ataşehir Konut</h4>
+          <p>Altın profilli lüks kabin</p>
+          <span class="gallery-tag">Konut</span>
+        </div>
+      </div>
+      <div class="gallery-item reveal">
+        <div class="gallery-item-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <path d="M3 9h18M9 21V9"/>
+          </svg>
+        </div>
+        <div class="gallery-overlay">
+          <h4>Spa & Wellness Center</h4>
+          <p>Buhar odası cam bölme sistemi</p>
+          <span class="gallery-tag">Ticari</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ ÜRÜN KATALOĞU ═══════════════════ -->
+  <section class="section" id="urunler">
+    <div class="section-header reveal">
+      <span class="section-tag">Ürün Kataloğu</span>
+      <h2 class="section-title">Premium <em>Koleksiyonumuz</em></h2>
+      <p class="section-desc">Her ihtiyaca uygun, en kaliteli duşakabin modelleri.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="catalog-grid">
+      <!-- Ürün 1 -->
+      <div class="catalog-card reveal">
+        <div class="catalog-card-visual">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 12h18"/>
+            </svg>
+          </div>
+          <span class="catalog-card-badge">En Çok Satan</span>
+        </div>
+        <div class="catalog-card-body">
+          <h3>Frameless Duşakabin</h3>
+          <p>Çerçevesiz temperli cam tasarımıyla modern ve ferah bir görünüm. 8-10mm cam kalınlığı seçeneği.</p>
+          <div class="catalog-features">
+            <span class="catalog-feature">Temperli Cam</span>
+            <span class="catalog-feature">8-10mm</span>
+            <span class="catalog-feature">Kolay Temizlik</span>
+          </div>
+          <div class="catalog-price">
+            <span class="from">Başlayan fiyat:</span>
+            <span class="amount">₺18.500</span>
+          </div>
+        </div>
+      </div>
+      <!-- Ürün 2 -->
+      <div class="catalog-card reveal">
+        <div class="catalog-card-visual">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/>
+              <path d="M9 3v18"/>
+            </svg>
+          </div>
+        </div>
+        <div class="catalog-card-body">
+          <h3>Sürgülü Sistem</h3>
+          <p>Alan tasarrufu sağlayan sürgülü cam kapı sistemi. Sessiz ray mekanizması ve yumuşak kapanış.</p>
+          <div class="catalog-features">
+            <span class="catalog-feature">Sürgülü Kapı</span>
+            <span class="catalog-feature">Sessiz Ray</span>
+            <span class="catalog-feature">Soft Close</span>
+          </div>
+          <div class="catalog-price">
+            <span class="from">Başlayan fiyat:</span>
+            <span class="amount">₺14.200</span>
+          </div>
+        </div>
+      </div>
+      <!-- Ürün 3 -->
+      <div class="catalog-card reveal">
+        <div class="catalog-card-visual">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/>
+            </svg>
+          </div>
+          <span class="catalog-card-badge">Yeni</span>
+        </div>
+        <div class="catalog-card-body">
+          <h3>Walk-in Duşakabin</h3>
+          <p>Kapısız açık geçiş tasarımı. Minimalist yaşam alanları için ideal, lüks otel hissi.</p>
+          <div class="catalog-features">
+            <span class="catalog-feature">Kapısız</span>
+            <span class="catalog-feature">10mm Cam</span>
+            <span class="catalog-feature">Minimalist</span>
+          </div>
+          <div class="catalog-price">
+            <span class="from">Başlayan fiyat:</span>
+            <span class="amount">₺22.800</span>
+          </div>
+        </div>
+      </div>
+      <!-- Ürün 4 -->
+      <div class="catalog-card reveal">
+        <div class="catalog-card-visual">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 4h16v16H4z"/><path d="M4 4l8 8M20 4l-8 8M4 20l8-8M20 20l-8-8"/>
+            </svg>
+          </div>
+        </div>
+        <div class="catalog-card-body">
+          <h3>Köşe Duşakabin</h3>
+          <p>90° köşe uygulamaları için ideal çözüm. Menteşeli veya sürgülü kapı seçeneği.</p>
+          <div class="catalog-features">
+            <span class="catalog-feature">Köşe Montaj</span>
+            <span class="catalog-feature">Çift Kapı</span>
+            <span class="catalog-feature">Özel Ölçü</span>
+          </div>
+          <div class="catalog-price">
+            <span class="from">Başlayan fiyat:</span>
+            <span class="amount">₺16.500</span>
+          </div>
+        </div>
+      </div>
+      <!-- Ürün 5 -->
+      <div class="catalog-card reveal">
+        <div class="catalog-card-visual">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 6v12"/>
+            </svg>
+          </div>
+        </div>
+        <div class="catalog-card-body">
+          <h3>Küvet Üstü Paravan</h3>
+          <p>Küvet üzerine monte edilen katlanır veya sabit cam panel. Pratik ve estetik çözüm.</p>
+          <div class="catalog-features">
+            <span class="catalog-feature">Küvet Uyumlu</span>
+            <span class="catalog-feature">Katlanır</span>
+            <span class="catalog-feature">6mm Cam</span>
+          </div>
+          <div class="catalog-price">
+            <span class="from">Başlayan fiyat:</span>
+            <span class="amount">₺8.900</span>
+          </div>
+        </div>
+      </div>
+      <!-- Ürün 6 -->
+      <div class="catalog-card reveal">
+        <div class="catalog-card-visual">
+          <div class="product-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+              <path d="M8 12h8M12 8v8"/>
+            </svg>
+          </div>
+          <span class="catalog-card-badge">Premium</span>
+        </div>
+        <div class="catalog-card-body">
+          <h3>Cam Bölme Sistemi</h3>
+          <p>Duşa özel cam bölme ve separatör çözümleri. Otel ve SPA projeleri için ideal.</p>
+          <div class="catalog-features">
+            <span class="catalog-feature">Bölme Sistem</span>
+            <span class="catalog-feature">12mm Cam</span>
+            <span class="catalog-feature">Ticari</span>
+          </div>
+          <div class="catalog-price">
+            <span class="from">Başlayan fiyat:</span>
+            <span class="amount">₺28.000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ ÇALIŞILAN FİRMALAR ═══════════════════ -->
+  <section class="section section-dark" id="firmalar">
+    <div class="section-header reveal">
+      <span class="section-tag">İş Ortaklarımız</span>
+      <h2 class="section-title">Güvenilir <em>Markalar</em> ile Çalışıyoruz</h2>
+      <p class="section-desc">Sektörün önde gelen firmaları ve müteahhitleriyle başarılı projelere imza atıyoruz.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="partners-track">
+      <div class="partners-scroll" id="partnersScroll">
+        <div class="partner-item"><span>Eczacıbaşı</span></div>
+        <div class="partner-item"><span>Kale Grubu</span></div>
+        <div class="partner-item"><span>Vitra</span></div>
+        <div class="partner-item"><span>Hilton Hotels</span></div>
+        <div class="partner-item"><span>Emlak Konut</span></div>
+        <div class="partner-item"><span>Tekfen İnşaat</span></div>
+        <div class="partner-item"><span>Rönesans</span></div>
+        <div class="partner-item"><span>Kalyon Grup</span></div>
+        <!-- Kopyalar (sonsuz kaydırma için) -->
+        <div class="partner-item"><span>Eczacıbaşı</span></div>
+        <div class="partner-item"><span>Kale Grubu</span></div>
+        <div class="partner-item"><span>Vitra</span></div>
+        <div class="partner-item"><span>Hilton Hotels</span></div>
+        <div class="partner-item"><span>Emlak Konut</span></div>
+        <div class="partner-item"><span>Tekfen İnşaat</span></div>
+        <div class="partner-item"><span>Rönesans</span></div>
+        <div class="partner-item"><span>Kalyon Grup</span></div>
+      </div>
+    </div>
+    <div class="partners-detail-grid">
+      <div class="partner-detail reveal">
+        <h4>Eczacıbaşı / VitrA</h4>
+        <p>Banyo ürünleri tedarik ve uygulama ortağı</p>
+        <span class="partner-year">2018'den beri</span>
+      </div>
+      <div class="partner-detail reveal">
+        <h4>Hilton Hotels</h4>
+        <p>Otel banyo renovasyon projeleri</p>
+        <span class="partner-year">2020'den beri</span>
+      </div>
+      <div class="partner-detail reveal">
+        <h4>Tekfen İnşaat</h4>
+        <p>Konut projelerinde toplu duşakabin uygulaması</p>
+        <span class="partner-year">2016'dan beri</span>
+      </div>
+      <div class="partner-detail reveal">
+        <h4>Rönesans Holding</h4>
+        <p>Rezidans ve karma proje uygulamaları</p>
+        <span class="partner-year">2019'dan beri</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ İLETİŞİM ═══════════════════ -->
+  <section class="section" id="iletisim">
+    <div class="section-header reveal">
+      <span class="section-tag">İletişim</span>
+      <h2 class="section-title">Ücretsiz <em>Keşif</em> & Teklif Alın</h2>
+      <p class="section-desc">Projeniz hakkında bilgi verin, size en uygun çözümü sunalım.</p>
+      <div class="divider"></div>
+    </div>
+    <div class="contact-wrapper">
+      <div class="contact-info reveal">
+        <h3>Bizimle İletişime Geçin</h3>
+        <p>Ücretsiz yerinde keşif ve ölçüm hizmeti sunuyoruz. Projenizin büyüklüğü fark etmeksizin, en iyi çözümü birlikte bulalım.</p>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>Telefon</span>
+            <p>+90 (212) 555 00 00</p>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>E-Posta</span>
+            <p>info@crystalcabin.com.tr</p>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>Showroom</span>
+            <p>Maslak Mah. AOS 55. Sok. No:2<br>Sarıyer / İstanbul</p>
+          </div>
+        </div>
+      </div>
+      <form class="contact-form reveal" id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullName">Ad Soyad</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Adınız Soyadınız" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Telefon</label>
+            <input type="tel" id="phone" name="phone" placeholder="05XX XXX XX XX" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">E-Posta</label>
+          <input type="email" id="email" name="email" placeholder="ornek@mail.com">
+        </div>
+        <div class="form-group">
+          <label for="projectType">Proje Tipi</label>
+          <select id="projectType" name="projectType">
+            <option value="">Seçiniz...</option>
+            <option value="bireysel">Konut — Bireysel</option>
+            <option value="toplu">Konut — Toplu Proje</option>
+            <option value="otel">Otel / Spa</option>
+            <option value="ticari">Ticari Alan</option>
+            <option value="diger">Diğer</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Mesajınız</label>
+          <textarea id="message" name="message" placeholder="Projeniz hakkında detay veriniz..."></textarea>
+        </div>
+        <button type="submit" class="form-submit">Teklif Talep Et</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo">Crystal<span>Cabin</span></a>
+        <p>Premium duşakabin çözümleri ile banyolarınıza değer katıyoruz. 20 yılı aşkın sektör deneyimi.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Hızlı Menü</h5>
+        <a href="#hakkimizda">Hakkımızda</a>
+        <a href="#projeler">Projeler</a>
+        <a href="#urunler">Ürünler</a>
+        <a href="#iletisim">İletişim</a>
+      </div>
+      <div class="footer-col">
+        <h5>Ürünler</h5>
+        <a href="#">Frameless Kabin</a>
+        <a href="#">Sürgülü Sistem</a>
+        <a href="#">Walk-in Kabin</a>
+        <a href="#">Cam Bölme</a>
+      </div>
+      <div class="footer-col">
+        <h5>Destek</h5>
+        <a href="#">SSS</a>
+        <a href="#">Garanti Şartları</a>
+        <a href="#">Bakım Rehberi</a>
+        <a href="#">Showroom</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 CrystalCabin. Tüm hakları saklıdır.</span>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram">ig</a>
+        <a href="#" aria-label="Facebook">fb</a>
+        <a href="#" aria-label="YouTube">yt</a>
+        <a href="#" aria-label="LinkedIn">in</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
