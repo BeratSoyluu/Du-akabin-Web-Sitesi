@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════
-   CrystalCabin — Admin Paneli JS
+   Oskar Duş — Admin Paneli JS
    admin.js — CRUD, EmailJS, Bildirimler
    ═══════════════════════════════════════════════ */
 
@@ -34,7 +34,6 @@ sidebarLinks.forEach(link => {
     pages.forEach(p => p.classList.remove('active'));
     document.getElementById(`page-${page}`).classList.add('active');
 
-    // Mobilde sidebar kapat
     document.getElementById('sidebar').classList.remove('open');
   });
 });
@@ -44,7 +43,6 @@ document.getElementById('menuToggle')?.addEventListener('click', () => {
   document.getElementById('sidebar').classList.toggle('open');
 });
 
-// Sidebar dışına tıklayınca kapat
 document.addEventListener('click', (e) => {
   const sidebar = document.getElementById('sidebar');
   const toggle = document.getElementById('menuToggle');
@@ -55,9 +53,10 @@ document.addEventListener('click', (e) => {
 
 
 // ═══════════════════════════════════════════════
-// PROJELER CRUD
+// PROJELER CRUD — ÇOKLU FOTOĞRAF DESTEĞİ
 // ═══════════════════════════════════════════════
 let editingProjectId = null;
+let tempProjectImages = [];
 
 function renderProjects() {
   const grid = document.getElementById('projectsGrid');
@@ -72,30 +71,50 @@ function renderProjects() {
     return;
   }
 
-  grid.innerHTML = projects.map(p => `
-    <div class="data-card">
-      ${p.image
-        ? `<img src="${p.image}" class="data-card-img" alt="${p.title}">`
-        : `<div class="data-card-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>`
-      }
-      <div class="data-card-body">
-        <h4>${p.title}</h4>
-        <p>${p.description || ''}</p>
-        <div class="data-card-meta">
-          ${p.tag ? `<span class="data-card-tag">${p.tag}</span>` : ''}
-          ${p.details ? `<span class="data-card-tag">${p.details}</span>` : ''}
-        </div>
-        <div class="data-card-actions">
-          <button class="btn-sm" onclick="editProject(${p.id})">Düzenle</button>
-          <button class="btn-sm danger" onclick="deleteProject(${p.id})">Sil</button>
+  grid.innerHTML = projects.map(p => {
+    // Eski tek image veya yeni images dizisi
+    const images = p.images && p.images.length > 0 ? p.images : (p.image ? [p.image] : []);
+    const coverImg = images[0] || '';
+    const photoCount = images.length;
+
+    return `
+      <div class="data-card">
+        ${coverImg
+          ? `<div style="position:relative">
+              <img src="${coverImg}" class="data-card-img" alt="${p.title}">
+              ${photoCount > 1 ? `<span style="position:absolute;top:0.5rem;right:0.5rem;background:rgba(0,0,0,0.7);color:var(--gold);font-size:0.7rem;padding:0.2rem 0.5rem;border:1px solid var(--border-light)">${photoCount} fotoğraf</span>` : ''}
+            </div>`
+          : `<div class="data-card-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>`
+        }
+        <div class="data-card-body">
+          <h4>${p.title}</h4>
+          <p>${p.description || ''}</p>
+          <div class="data-card-meta">
+            ${p.tag ? `<span class="data-card-tag">${p.tag}</span>` : ''}
+            ${p.details ? `<span class="data-card-tag">${p.details}</span>` : ''}
+          </div>
+          <div class="data-card-actions">
+            <button class="btn-sm" onclick="editProject(${p.id})">Düzenle</button>
+            <button class="btn-sm danger" onclick="deleteProject(${p.id})">Sil</button>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function openProjectModal(project = null) {
   editingProjectId = project ? project.id : null;
+
+  // Mevcut fotoğrafları yükle (eski ve yeni format uyumu)
+  if (project) {
+    tempProjectImages = project.images && project.images.length > 0
+      ? [...project.images]
+      : (project.image ? [project.image] : []);
+  } else {
+    tempProjectImages = [];
+  }
+
   document.getElementById('modalTitle').textContent = project ? 'Projeyi Düzenle' : 'Yeni Proje Ekle';
 
   document.getElementById('modalBody').innerHTML = `
@@ -118,14 +137,13 @@ function openProjectModal(project = null) {
       </div>
     </div>
     <div class="form-group">
-      <label>Fotoğraf</label>
-      <div class="file-upload" id="projectFileUpload">
+      <label>Fotoğraflar (birden fazla seçebilirsiniz)</label>
+      <div class="file-upload">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-        <p>Fotoğraf yüklemek için tıklayın veya sürükleyin</p>
-        <span class="file-name" id="projectFileName"></span>
-        <input type="file" id="projectFile" accept="image/*" onchange="handleFileSelect(this, 'projectFileName', 'projectPreview')">
+        <p>Fotoğraf yüklemek için tıklayın (birden fazla seçebilirsiniz)</p>
+        <input type="file" id="projectFiles" accept="image/*" multiple onchange="handleProjectFiles(this)">
       </div>
-      ${project?.image ? `<img src="${project.image}" class="file-preview" id="projectPreview">` : '<img class="file-preview" id="projectPreview" style="display:none">'}
+      <div id="projectPreviews" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem"></div>
     </div>
     <div class="modal-actions">
       <button class="btn-add" onclick="saveProject()">
@@ -134,7 +152,53 @@ function openProjectModal(project = null) {
     </div>
   `;
 
+  // Mevcut fotoğrafları göster
+  renderProjectPreviews();
   openModalOverlay();
+}
+
+function handleProjectFiles(input) {
+  const files = Array.from(input.files);
+
+  files.forEach(file => {
+    if (file.size > 2 * 1024 * 1024) {
+      showToast(`${file.name} — 2MB sınırını aşıyor, atlandı`, 'error');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      tempProjectImages.push(e.target.result);
+      renderProjectPreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Input'u sıfırla (aynı dosyayı tekrar seçebilsin)
+  input.value = '';
+}
+
+function renderProjectPreviews() {
+  const container = document.getElementById('projectPreviews');
+  if (!container) return;
+
+  if (tempProjectImages.length === 0) {
+    container.innerHTML = '<p style="font-size:0.78rem;color:var(--text-muted)">Henüz fotoğraf eklenmedi</p>';
+    return;
+  }
+
+  container.innerHTML = tempProjectImages.map((img, i) => `
+    <div style="position:relative;width:80px;height:80px;flex-shrink:0">
+      <img src="${img}" style="width:100%;height:100%;object-fit:cover;border:1px solid var(--border)">
+      ${i === 0 ? '<span style="position:absolute;bottom:0;left:0;right:0;background:var(--gold);color:var(--bg-primary);font-size:0.55rem;text-align:center;padding:1px;letter-spacing:0.5px">KAPAK</span>' : ''}
+      <button type="button" onclick="removeProjectImage(${i})" style="position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--danger);color:#fff;border:none;border-radius:50%;font-size:11px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center">&times;</button>
+    </div>
+  `).join('');
+}
+
+function removeProjectImage(index) {
+  tempProjectImages.splice(index, 1);
+  renderProjectPreviews();
 }
 
 function saveProject() {
@@ -142,8 +206,6 @@ function saveProject() {
   if (!title) { showToast('Proje adı gerekli', 'error'); return; }
 
   const projects = DB.get('projects');
-  const preview = document.getElementById('projectPreview');
-  const imageData = preview && preview.style.display !== 'none' ? preview.src : '';
 
   const data = {
     id: editingProjectId || Date.now(),
@@ -151,7 +213,8 @@ function saveProject() {
     description: document.getElementById('projectDesc').value.trim(),
     tag: document.getElementById('projectTag').value.trim(),
     details: document.getElementById('projectDetails').value.trim(),
-    image: imageData
+    images: [...tempProjectImages],
+    image: tempProjectImages[0] || ''
   };
 
   if (editingProjectId) {
@@ -445,7 +508,6 @@ function renderMessages() {
     return;
   }
 
-  // En yeniden eskiye sırala
   const sorted = [...messages].sort((a, b) => b.id - a.id);
 
   list.innerHTML = sorted.map(m => `
@@ -471,7 +533,6 @@ function viewMessage(id) {
   const msg = messages.find(m => m.id === id);
   if (!msg) return;
 
-  // Okundu olarak işaretle
   msg.read = true;
   DB.set('messages', messages);
   renderMessages();
@@ -621,9 +682,9 @@ function closeModal() {
   editingProjectId = null;
   editingProductId = null;
   editingPartnerId = null;
+  tempProjectImages = [];
 }
 
-// ESC ile modal kapat
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     closeModal();
@@ -631,7 +692,6 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Overlay tıklamayla kapat
 document.getElementById('modalOverlay').addEventListener('click', (e) => {
   if (e.target === e.currentTarget) closeModal();
 });
@@ -642,13 +702,12 @@ document.getElementById('messageModalOverlay').addEventListener('click', (e) => 
 
 
 // ═══════════════════════════════════════════════
-// DOSYA YÜKLEMESİ
+// DOSYA YÜKLEMESİ (Ürünler için tekli)
 // ═══════════════════════════════════════════════
 function handleFileSelect(input, fileNameId, previewId) {
   const file = input.files[0];
   if (!file) return;
 
-  // Dosya boyutu kontrolü (2MB)
   if (file.size > 2 * 1024 * 1024) {
     showToast('Dosya boyutu 2MB\'dan küçük olmalı', 'error');
     input.value = '';
@@ -713,7 +772,7 @@ function getProjectTypeLabel(type) {
 
 
 // ═══════════════════════════════════════════════
-// ESKİ MESAJLARI MİGRASYON (main.js uyumluluğu)
+// ESKİ MESAJLARI MİGRASYON
 // ═══════════════════════════════════════════════
 function migrateOldMessages() {
   const oldMessages = JSON.parse(localStorage.getItem('crystalcabin_messages') || '[]');
