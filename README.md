@@ -21,16 +21,16 @@ Oskar Duş firması için geliştirilmiş, lüks ve modern bir tasarıma sahip k
 ## 📸 Ekran Görüntüleri
 
 ### Ana Sayfa (Hero Section)
-![Ana Sayfa](Ekran%20görüntüsü%202026-05-13%20153344.jpg)
+![Ana Sayfa](Ekran%20görüntüsü%202026-05-13%20153344.jpg.png)
 
 ### Projelerimiz Sayfası
-![Projeler](Ekran%20görüntüsü%202026-05-13%20153401.jpg)
+![Projeler](Ekran%20görüntüsü%202026-05-13%20153401.jpg.png)
 
 ### Referans Çalışmalar
-![Son Çalışmalar](Ekran%20görüntüsü%202026-05-13%20153353.jpg)
+![Son Çalışmalar](Ekran%20görüntüsü%202026-05-13%20153353.jpg.png)
 
 ### Ücretsiz Keşif ve Teklif Formu
-![Teklif Al](Ekran%20görüntüsü%202026-05-13%20153417.jpg)
+![Teklif Al](Ekran%20görüntüsü%202026-05-13%20153417.jpg.png)
 
 ## ⚙️ Kurulum
 
