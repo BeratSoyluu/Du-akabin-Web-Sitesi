@@ -7,6 +7,13 @@
 // ADMIN PANELİNDEN VERİ ÇEKME FONKSİYONLARI
 // ═══════════════════════════════════════════════
 
+// [DÜZELTME] Hem images dizisini hem de eski tek image formatını destekle
+function getProjectCoverImage(project) {
+  if (project.images && project.images.length > 0) return project.images[0];
+  if (project.image) return project.image;
+  return '';
+}
+
 // Proje kartı oluştur (tekrar kullanılabilir)
 function createProjectCard(project, isLarge) {
   const card = document.createElement('div');
@@ -15,8 +22,10 @@ function createProjectCard(project, isLarge) {
   const imgDiv = document.createElement('div');
   imgDiv.className = 'gallery-item-img';
 
-  if (project.image) {
-    imgDiv.style.backgroundImage = `url('${project.image}')`;
+  // [DÜZELTME] p.images dizisini kontrol et, eski formata da bak
+  const coverImg = getProjectCoverImage(project);
+  if (coverImg) {
+    imgDiv.style.backgroundImage = `url('${coverImg}')`;
     imgDiv.style.backgroundSize = 'cover';
     imgDiv.style.backgroundPosition = 'center';
   } else {
@@ -59,14 +68,12 @@ function loadProjects() {
     container.appendChild(createProjectCard(project, isLarge));
   });
 
-  // "Tümünü Gör" butonu
+  // "Tümünü Gör" butonu — 6'dan fazla proje varsa göster
   if (projects.length > maxVisible) {
     const btnWrapper = document.createElement('div');
     btnWrapper.style.cssText = 'grid-column: 1 / -1; text-align: center; margin-top: 1.5rem;';
-    
-    // Buton yerine 'a' etiketi kullanarak yeni sekmeye yönlendirme ekledik
     btnWrapper.innerHTML = `
-      <a href="projeler.html" target="_blank" style="
+      <a href="projeler.html" style="
         display: inline-block;
         padding: 0.9rem 2.5rem;
         background: transparent;
@@ -82,43 +89,8 @@ function loadProjects() {
         text-decoration: none;
       ">Tüm Projeleri Gör (${projects.length})</a>
     `;
-    
     container.appendChild(btnWrapper);
-}
-}
-
-// Tüm projeleri göster
-function showAllProjects() {
-  const projects = JSON.parse(localStorage.getItem('cc_projects') || '[]');
-  const container = document.querySelector('.gallery-grid');
-  if (!container) return;
-
-  container.innerHTML = '';
-
-  projects.forEach((project, index) => {
-    const isLarge = index === 0 && projects.length >= 3;
-    container.appendChild(createProjectCard(project, isLarge));
-  });
-
-  // "Daha Az Göster" butonu
-  const btnWrapper = document.createElement('div');
-  btnWrapper.style.cssText = 'grid-column: 1 / -1; text-align: center; margin-top: 1.5rem;';
-  btnWrapper.innerHTML = `
-    <button onclick="loadProjects()" style="
-      padding: 0.9rem 2.5rem;
-      background: transparent;
-      color: var(--text-primary);
-      font-family: var(--font-body);
-      font-size: 0.8rem;
-      font-weight: 400;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border: 1px solid var(--border-light);
-      cursor: pointer;
-      transition: all 0.3s;
-    ">Daha Az Göster</button>
-  `;
-  container.appendChild(btnWrapper);
+  }
 }
 
 // Ürünleri yükle
@@ -256,10 +228,10 @@ function loadSiteSettings() {
 
   const socialLinks = document.querySelectorAll('.footer-social a');
   const socialMap = [
-    { key: 'instagram', label: 'ig' },
-    { key: 'facebook', label: 'fb' },
-    { key: 'youtube', label: 'yt' },
-    { key: 'linkedin', label: 'in' }
+    { key: 'instagram' },
+    { key: 'facebook' },
+    { key: 'youtube' },
+    { key: 'linkedin' }
   ];
   socialLinks.forEach((link, i) => {
     if (socialMap[i] && s[socialMap[i].key]) {
@@ -319,6 +291,7 @@ function initWhatsApp() {
 document.addEventListener('DOMContentLoaded', () => {
 
   // ─── ADMİN PANELİNDEN VERİLERİ YÜKLE ───
+  // [DÜZELTME] bridge.js kaldırıldı, tüm veri yükleme burada
   loadProjects();
   loadProducts();
   loadPartners();
@@ -363,8 +336,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ─── 3. SMOOTH SCROLL ───
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
+      const href = anchor.getAttribute('href');
+      if (href === '#') return;
       e.preventDefault();
-      const target = document.querySelector(anchor.getAttribute('href'));
+      const target = document.querySelector(href);
       if (target) {
         const navHeight = nav.offsetHeight;
         const targetPosition = target.getBoundingClientRect().top + window.scrollY - navHeight;
@@ -448,19 +423,28 @@ document.addEventListener('DOMContentLoaded', () => {
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const formData = {
-        fullName: document.getElementById('fullName').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value,
-        projectType: document.getElementById('projectType').value,
-        message: document.getElementById('message').value,
-        date: new Date().toISOString()
-      };
+      const fullName = document.getElementById('fullName').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const projectType = document.getElementById('projectType').value;
+      const message = document.getElementById('message').value.trim();
 
-      if (!formData.fullName || !formData.phone) {
-        showFormMessage('Lütfen ad soyad ve telefon alanlarını doldurun.', 'error');
+      // [DÜZELTME] Geliştirilmiş form doğrulama
+      if (!fullName) {
+        showFormMessage('Lütfen adınızı ve soyadınızı girin.', 'error');
         return;
       }
+      if (!phone) {
+        showFormMessage('Lütfen telefon numaranızı girin.', 'error');
+        return;
+      }
+      // [DÜZELTME] E-posta format kontrolü (dolu ise)
+      if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showFormMessage('Lütfen geçerli bir e-posta adresi girin.', 'error');
+        return;
+      }
+
+      const formData = { fullName, phone, email, projectType, message, date: new Date().toISOString() };
 
       saveMessage(formData);
       await sendEmailNotification(formData);
@@ -529,6 +513,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (Notification.permission === 'granted') {
       new Notification('Oskar Duş — Yeni Mesaj', {
         body: `${formData.fullName} — ${formData.phone}\n${formData.message?.substring(0, 80) || 'Yeni teklif talebi'}`,
+        // [DÜZELTME] marka adı ve ikon güncellendi
         icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="80" font-size="80">🚿</text></svg>'
       });
     } else if (Notification.permission !== 'denied') {
@@ -579,20 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // ─── 8. GALERİ — Lightbox Efekti ───
-  const galleryItems = document.querySelectorAll('.gallery-item');
-
-  galleryItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const overlay = item.querySelector('.gallery-overlay');
-      const title = overlay?.querySelector('h4')?.textContent || '';
-      const desc = overlay?.querySelector('p')?.textContent || '';
-      console.log(`Proje: ${title} — ${desc}`);
-    });
-  });
-
-
-  // ─── 9. ACTIVE NAV LINK — Scroll Pozisyonuna Göre ───
+  // ─── 8. ACTIVE NAV LINK — Scroll Pozisyonuna Göre ───
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('.nav-links a:not(.nav-cta)');
 

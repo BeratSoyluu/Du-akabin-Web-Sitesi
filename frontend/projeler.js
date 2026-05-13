@@ -211,3 +211,25 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowRight') nextImage();
   if (e.key === 'ArrowLeft') prevImage();
 });
+
+// ═══════════════════════════════════════════════
+// MOBİL SWIPE DESTEĞİ
+// ═══════════════════════════════════════════════
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.getElementById('lbMain').addEventListener('touchstart', (e) => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.getElementById('lbMain').addEventListener('touchend', (e) => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+
+  // Yatay hareket dikey hareketten büyükse swipe say
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+    if (dx < 0) nextImage();
+    else prevImage();
+  }
+}, { passive: true });

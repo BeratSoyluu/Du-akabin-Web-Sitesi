@@ -3,6 +3,73 @@
    admin.js — CRUD, EmailJS, Bildirimler
    ═══════════════════════════════════════════════ */
 
+// ═══════════════════════════════════════════════
+// ŞİFRE KORUMASI — DOMContentLoaded'dan çağrılır
+// ═══════════════════════════════════════════════
+function initAuth() {
+  const DEFAULT_PASSWORD = 'oskar2024';
+  const SESSION_KEY = 'cc_admin_auth';
+
+  if (sessionStorage.getItem(SESSION_KEY) === 'true') return;
+
+  // body.style.display = 'none' yerine içerikleri gizle
+  const sidebar = document.querySelector('.sidebar');
+  const mainContent = document.querySelector('.main-content');
+  const mobileHeader = document.querySelector('.mobile-header');
+  if (sidebar) sidebar.style.display = 'none';
+  if (mainContent) mainContent.style.display = 'none';
+  if (mobileHeader) mobileHeader.style.display = 'none';
+
+  const overlay = document.createElement('div');
+  overlay.id = 'authOverlay';
+  overlay.style.cssText = `
+    position:fixed;inset:0;background:#0a0a0a;z-index:99999;
+    display:flex;align-items:center;justify-content:center;
+  `;
+  overlay.innerHTML = `
+    <div style="text-align:center;max-width:340px;width:90%;padding:2.5rem;border:1px solid #2a2a2a;background:#111">
+      <h2 style="font-family:'Outfit',sans-serif;font-weight:300;color:#fff;font-size:1.4rem;margin-bottom:0.3rem">
+        Oskar <span style="color:#c9a96e">Duş</span>
+      </h2>
+      <p style="color:#666;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:2rem">Admin Paneli</p>
+      <input type="password" id="authInput" placeholder="Şifre"
+        style="width:100%;padding:0.8rem 1rem;background:#1a1a1a;border:1px solid #2a2a2a;color:#fff;font-family:'Outfit',sans-serif;font-size:0.9rem;margin-bottom:0.8rem;box-sizing:border-box;outline:none">
+      <p id="authError" style="color:#e74c3c;font-size:0.78rem;margin-bottom:0.8rem;min-height:1rem"></p>
+      <button id="authBtn"
+        style="width:100%;padding:0.8rem;background:#c9a96e;border:none;color:#0a0a0a;font-family:'Outfit',sans-serif;font-size:0.85rem;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer">
+        Giriş Yap
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  function tryLogin() {
+    const storedPw = localStorage.getItem('cc_admin_password') || DEFAULT_PASSWORD;
+    if (document.getElementById('authInput').value === storedPw) {
+      sessionStorage.setItem(SESSION_KEY, 'true');
+      overlay.remove();
+      const sb = document.querySelector('.sidebar');
+      const mc = document.querySelector('.main-content');
+      const mh = document.querySelector('.mobile-header');
+      if (sb) sb.style.display = '';
+      if (mc) mc.style.display = '';
+      if (mh) mh.style.display = '';
+    } else {
+      document.getElementById('authError').textContent = 'Şifre hatalı, tekrar deneyin.';
+      document.getElementById('authInput').value = '';
+      document.getElementById('authInput').focus();
+    }
+  }
+
+  document.getElementById('authBtn').addEventListener('click', tryLogin);
+  document.getElementById('authInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') tryLogin();
+  });
+
+  setTimeout(() => document.getElementById('authInput')?.focus(), 50);
+}
+
+
 // ─── VERI YÖNETİMİ ───
 const DB = {
   get(key) {
@@ -53,6 +120,60 @@ document.addEventListener('click', (e) => {
 
 
 // ═══════════════════════════════════════════════
+// [YENİ] FOTOĞRAF BOYUT KÜÇÜLTME (Canvas API)
+// 2MB'ı aşan fotoğrafları otomatik küçültür
+// ═══════════════════════════════════════════════
+function resizeImageIfNeeded(file, maxSizeMB = 2, maxDim = 1600) {
+  return new Promise((resolve) => {
+    const limitBytes = maxSizeMB * 1024 * 1024;
+
+    // Boyut sınır altındaysa direkt oku
+    if (file.size <= limitBytes) {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    // Büyük dosyayı canvas ile küçült
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+
+      if (width > maxDim || height > maxDim) {
+        const ratio = Math.min(maxDim / width, maxDim / height);
+        width = Math.round(width * ratio);
+        height = Math.round(height * ratio);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+      // Kaliteyi düşürerek hedef boyuta getir
+      let quality = 0.85;
+      let dataUrl = canvas.toDataURL('image/jpeg', quality);
+      while (dataUrl.length * 0.75 > limitBytes && quality > 0.4) {
+        quality -= 0.1;
+        dataUrl = canvas.toDataURL('image/jpeg', quality);
+      }
+      resolve(dataUrl);
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.readAsDataURL(file);
+    };
+    img.src = url;
+  });
+}
+
+
+// ═══════════════════════════════════════════════
 // PROJELER CRUD — ÇOKLU FOTOĞRAF DESTEĞİ
 // ═══════════════════════════════════════════════
 let editingProjectId = null;
@@ -72,7 +193,6 @@ function renderProjects() {
   }
 
   grid.innerHTML = projects.map(p => {
-    // Eski tek image veya yeni images dizisi
     const images = p.images && p.images.length > 0 ? p.images : (p.image ? [p.image] : []);
     const coverImg = images[0] || '';
     const photoCount = images.length;
@@ -106,7 +226,6 @@ function renderProjects() {
 function openProjectModal(project = null) {
   editingProjectId = project ? project.id : null;
 
-  // Mevcut fotoğrafları yükle (eski ve yeni format uyumu)
   if (project) {
     tempProjectImages = project.images && project.images.length > 0
       ? [...project.images]
@@ -140,7 +259,7 @@ function openProjectModal(project = null) {
       <label>Fotoğraflar (birden fazla seçebilirsiniz)</label>
       <div class="file-upload">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-        <p>Fotoğraf yüklemek için tıklayın (birden fazla seçebilirsiniz)</p>
+        <p>Fotoğraf yüklemek için tıklayın <small style="display:block;color:var(--text-muted);margin-top:0.2rem">Büyük fotoğraflar otomatik küçültülür</small></p>
         <input type="file" id="projectFiles" accept="image/*" multiple onchange="handleProjectFiles(this)">
       </div>
       <div id="projectPreviews" style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem"></div>
@@ -152,29 +271,23 @@ function openProjectModal(project = null) {
     </div>
   `;
 
-  // Mevcut fotoğrafları göster
   renderProjectPreviews();
   openModalOverlay();
 }
 
+// [DÜZELTME] Fotoğraf yükleme artık canvas ile otomatik küçültüyor
 function handleProjectFiles(input) {
   const files = Array.from(input.files);
 
-  files.forEach(file => {
-    if (file.size > 2 * 1024 * 1024) {
-      showToast(`${file.name} — 2MB sınırını aşıyor, atlandı`, 'error');
-      return;
-    }
+  const promises = files.map(file =>
+    resizeImageIfNeeded(file).then(dataUrl => {
+      tempProjectImages.push(dataUrl);
+    }).catch(() => {
+      showToast(`${file.name} — yüklenemedi, atlandı`, 'error');
+    })
+  );
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      tempProjectImages.push(e.target.result);
-      renderProjectPreviews();
-    };
-    reader.readAsDataURL(file);
-  });
-
-  // Input'u sıfırla (aynı dosyayı tekrar seçebilsin)
+  Promise.all(promises).then(() => renderProjectPreviews());
   input.value = '';
 }
 
@@ -317,9 +430,9 @@ function openProductModal(product = null) {
       <label>Fotoğraf</label>
       <div class="file-upload">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-        <p>Fotoğraf yüklemek için tıklayın</p>
+        <p>Fotoğraf yüklemek için tıklayın<small style="display:block;color:var(--text-muted);margin-top:0.2rem">Büyük fotoğraflar otomatik küçültülür</small></p>
         <span class="file-name" id="productFileName"></span>
-        <input type="file" id="productFile" accept="image/*" onchange="handleFileSelect(this, 'productFileName', 'productPreview')">
+        <input type="file" id="productFile" accept="image/*" onchange="handleProductFile(this)">
       </div>
       ${product?.image ? `<img src="${product.image}" class="file-preview" id="productPreview">` : '<img class="file-preview" id="productPreview" style="display:none">'}
     </div>
@@ -331,6 +444,24 @@ function openProductModal(product = null) {
   `;
 
   openModalOverlay();
+}
+
+// [DÜZELTME] Ürün fotoğrafı da canvas ile küçültülüyor
+function handleProductFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  document.getElementById('productFileName').textContent = file.name;
+
+  resizeImageIfNeeded(file).then(dataUrl => {
+    const preview = document.getElementById('productPreview');
+    preview.src = dataUrl;
+    preview.style.display = 'block';
+  }).catch(() => {
+    showToast('Fotoğraf yüklenemedi', 'error');
+  });
+
+  input.value = '';
 }
 
 function saveProduct() {
@@ -537,6 +668,10 @@ function viewMessage(id) {
   DB.set('messages', messages);
   renderMessages();
 
+  // [DÜZELTME] WhatsApp numarası: önce 90'ları temizle, sonra 90 ekle
+  const rawPhone = (msg.phone || '').replace(/\D/g, '').replace(/^90/, '');
+  const waNumber = '90' + rawPhone;
+
   document.getElementById('messageModalBody').innerHTML = `
     <div style="margin-bottom:1rem">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem">
@@ -564,8 +699,8 @@ function viewMessage(id) {
     </div>
     <div style="display:flex;gap:0.5rem;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)">
       <a href="tel:${msg.phone}" class="btn-add" style="text-decoration:none;font-size:0.78rem;padding:0.6rem 1rem">Ara</a>
-      <a href="mailto:${msg.email}" class="btn-sm" style="text-decoration:none;padding:0.6rem 1rem">E-Posta Gönder</a>
-      <a href="https://wa.me/90${(msg.phone || '').replace(/\D/g,'')}" target="_blank" class="btn-sm" style="text-decoration:none;padding:0.6rem 1rem;color:#25D366;border-color:#25D366">WhatsApp</a>
+      <a href="mailto:${msg.email}" class="btn-sm" style="text-decoration:none;padding:0.6rem 1rem">E-Posta</a>
+      <a href="https://wa.me/${waNumber}" target="_blank" class="btn-sm" style="text-decoration:none;padding:0.6rem 1rem;color:#25D366;border-color:#25D366">WhatsApp</a>
     </div>
   `;
 
@@ -609,7 +744,7 @@ function loadSettings() {
   document.getElementById('settingSlogan').value = s.slogan || '';
   document.getElementById('settingPhone').value = s.phone || '';
   document.getElementById('settingEmail').value = s.email || '';
-  document.getElementById('settingAddress').value = s.address || '';
+  document.getElementById('settingAddress').value = s.address || 'Çırçır, Burkulan Sk. No:1\nEyüpsultan / İstanbul';
   document.getElementById('settingInstagram').value = s.instagram || '';
   document.getElementById('settingFacebook').value = s.facebook || '';
   document.getElementById('settingYoutube').value = s.youtube || '';
@@ -665,6 +800,76 @@ function saveWhatsApp() {
 
 
 // ═══════════════════════════════════════════════
+// [YENİ] VERİ EXPORT / IMPORT
+// ═══════════════════════════════════════════════
+function exportData() {
+  const backup = {
+    version: 1,
+    date: new Date().toISOString(),
+    projects: DB.get('projects'),
+    products: DB.get('products'),
+    partners: DB.get('partners'),
+    messages: DB.get('messages'),
+    settings: DB.getObj('settings'),
+    whatsapp: DB.getObj('whatsapp')
+  };
+
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `oskardus-yedek-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Veriler dışa aktarıldı', 'success');
+}
+
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.version) throw new Error('Geçersiz yedek dosyası');
+
+      if (!confirm(`${data.date ? new Date(data.date).toLocaleDateString('tr-TR') : 'Bilinmiyor'} tarihli yedek içe aktarılacak. Mevcut veriler silinecek. Devam edilsin mi?`)) return;
+
+      if (data.projects) DB.set('projects', data.projects);
+      if (data.products) DB.set('products', data.products);
+      if (data.partners) DB.set('partners', data.partners);
+      if (data.messages) DB.set('messages', data.messages);
+      if (data.settings) DB.setObj('settings', data.settings);
+      if (data.whatsapp) DB.setObj('whatsapp', data.whatsapp);
+
+      renderProjects();
+      renderProducts();
+      renderPartners();
+      renderMessages();
+      loadSettings();
+      loadWhatsApp();
+
+      showToast('Veriler başarıyla içe aktarıldı', 'success');
+    } catch (err) {
+      showToast('Geçersiz yedek dosyası', 'error');
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+// [YENİ] Şifre değiştirme
+function changeAdminPassword() {
+  const newPw = prompt('Yeni admin şifresi girin (en az 6 karakter):');
+  if (!newPw) return;
+  if (newPw.length < 6) { showToast('Şifre en az 6 karakter olmalı', 'error'); return; }
+  localStorage.setItem('cc_admin_password', newPw);
+  showToast('Şifre güncellendi. Bir sonraki girişte geçerli olacak.', 'success');
+}
+
+
+// ═══════════════════════════════════════════════
 // MODAL YÖNETİMİ
 // ═══════════════════════════════════════════════
 function openModal(type) {
@@ -702,27 +907,18 @@ document.getElementById('messageModalOverlay').addEventListener('click', (e) => 
 
 
 // ═══════════════════════════════════════════════
-// DOSYA YÜKLEMESİ (Ürünler için tekli)
+// DOSYA YÜKLEMESİ (Eski uyumluluk — tekli)
 // ═══════════════════════════════════════════════
 function handleFileSelect(input, fileNameId, previewId) {
   const file = input.files[0];
   if (!file) return;
-
-  if (file.size > 2 * 1024 * 1024) {
-    showToast('Dosya boyutu 2MB\'dan küçük olmalı', 'error');
-    input.value = '';
-    return;
-  }
-
   document.getElementById(fileNameId).textContent = file.name;
 
-  const reader = new FileReader();
-  reader.onload = (e) => {
+  resizeImageIfNeeded(file).then(dataUrl => {
     const preview = document.getElementById(previewId);
-    preview.src = e.target.result;
+    preview.src = dataUrl;
     preview.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
+  });
 }
 
 
@@ -791,6 +987,7 @@ function migrateOldMessages() {
 // BAŞLATMA
 // ═══════════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
+  initAuth();
   migrateOldMessages();
   renderProjects();
   renderProducts();

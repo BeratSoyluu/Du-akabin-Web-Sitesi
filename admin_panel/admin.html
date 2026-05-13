@@ -213,6 +213,36 @@
           </div>
         </div>
         <button class="btn-add" onclick="saveSettings()" style="margin-top:1rem;">Ayarları Kaydet</button>
+
+        <!-- Veri Yedekleme -->
+        <div class="settings-section" style="margin-top:2rem">
+          <h3>İçerikleri Kaydet / Geri Yükle</h3>
+          <p class="settings-hint">
+            Projeleriniz, ürünleriniz ve mesajlarınız bilgisayarınızın tarayıcısında saklanıyor. 
+            Tarayıcıyı temizlerseniz veya başka bir bilgisayarda açarsanız veriler kaybolabilir.<br><br>
+            <strong style="color:var(--gold)">💾 Kaydet:</strong> Tüm içeriklerinizi bilgisayarınıza bir dosya olarak indirin.<br>
+            <strong style="color:var(--gold)">📂 Geri Yükle:</strong> Daha önce kaydettiğiniz dosyayı seçerek içeriklerinizi geri getirin.
+          </p>
+          <div style="display:flex;gap:0.8rem;flex-wrap:wrap;margin-top:1.2rem">
+            <button class="btn-add" onclick="exportData()" style="font-size:0.82rem">
+              💾 İçerikleri Bilgisayara Kaydet
+            </button>
+            <label class="btn-sm" style="cursor:pointer;padding:0.6rem 1.2rem;display:inline-flex;align-items:center;gap:0.4rem">
+              📂 Kaydedilen Dosyayı Yükle
+              <input type="file" accept=".json" onchange="importData(this)" style="display:none">
+            </label>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.8rem">
+            ⚠️ Geri yükleme işlemi mevcut içeriklerin üzerine yazar. Önce kaydetmenizi öneririz.
+          </p>
+        </div>
+
+        <!-- YENİ: Şifre Değiştirme -->
+        <div class="settings-section" style="margin-top:2rem">
+          <h3>Admin Şifresi</h3>
+          <p class="settings-hint">Varsayılan şifre: <code style="color:var(--gold);background:rgba(201,169,110,0.1);padding:2px 6px">oskar2024</code> — Lütfen değiştirin.</p>
+          <button class="btn-sm" onclick="changeAdminPassword()" style="margin-top:0.8rem">Şifreyi Değiştir</button>
+        </div>
       </div>
     </div>
  
